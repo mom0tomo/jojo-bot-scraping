@@ -26,15 +26,19 @@ func scrape(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	text := string(byteArray[1])
+	# 適当な値を入れている
+	title := string(byteArray[0])
+	date := string(byteArray[1])
+	text := string(byteArray[2])
 
 	cnt := &Content{
+		Title:     title,
+		Date:      date,
 		Text:      text,
 		CreatedAt: time.Now(),
 	}
 
-	const k = "Content"
-	key := datastore.NewIncompleteKey(ctx, k, nil)
+	key := datastore.NewIncompleteKey(ctx, "Content", nil)
 	if _, err := datastore.Put(ctx, key, cnt); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
